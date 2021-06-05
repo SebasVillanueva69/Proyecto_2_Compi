@@ -11,11 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 
 /**
@@ -31,6 +33,7 @@ public class Principal {
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
         analizador(chooser);
+        parser(chooser);
     }
     
     public static void generar(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception {
@@ -104,7 +107,18 @@ public class Principal {
         }
     }
     
-    //private static void parser(JFileChooser chooser) {
-    //    String ST = chooser.getSelectedFile();
-    //}
+    private static void parser(JFileChooser chooser) throws IOException {
+        String resultado = " ";
+        File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
+        String ST = new String(Files.readAllBytes(archivo.toPath()));
+        Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+        try {
+            s.parse();
+            System.out.println("Analisis realizado correctamente.");
+        } catch (Exception ex) {
+            Symbol sym = s.getS();
+            resultado += ("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left +1) + ", Texto: \"" + sym.value + "\"" + "\n");
+        }
+        System.out.println(resultado);
+    }
 }
