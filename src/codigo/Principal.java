@@ -88,7 +88,8 @@ public class Principal {
                     case Op_logico: case Op_relacional: case Op_atribucion: case Op_incremento:
                     case Op_booleano: case Parentesis_a: case Parentesis_c: case Llave_a: case Llave_c:
                     case Corchete_a: case Corchete_c: case Main: case P_coma: case Identificador:
-                    case Literal: case Numero:
+                    case Literal: case Numero: case Break: case Case: case Const: case Continue: 
+                    case Default: case Return: case Switch: case Void:
                         resultado += "  " + tokens + "\t" + lexer.lexeme + "\n";
                         break;
                     default:
@@ -104,6 +105,6 @@ public class Principal {
     }
     
     //private static void parser(JFileChooser chooser) {
-    //    String ST = choos
+    //    String ST = chooser.getSelectedFile();
     //}
 }

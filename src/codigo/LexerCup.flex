@@ -51,6 +51,30 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada For */
 ( for ) {return new Symbol(sym.For, yychar, yyline, yytext());}
 
+/* Palabra reservada Break */
+( break ) {return new Symbol(sym.Break, yychar, yyline, yytext());}
+
+/* Palabra reservada Case */
+( case ) {return new Symbol(sym.Case, yychar, yyline, yytext());}
+
+/* Palabra reservada Const */
+( case ) {return new Symbol(sym.Const, yychar, yyline, yytext());}
+
+/* Palabra reservada Continue */
+( continue ) {return new Symbol(sym.Continue, yychar, yyline, yytext());}
+
+/* Palabra reservada Default */
+( default ) {return new Symbol(sym.Default, yychar, yyline, yytext());}
+
+/* Palabra reservada Return */
+( return ) {return new Symbol(sym.Return, yychar, yyline, yytext());}
+
+/* Palabra reservada Switch */
+( switch ) {return new Symbol(sym.Switch, yychar, yyline, yytext());}
+
+/* Palabra reservada Void */
+( void ) {return new Symbol(sym.Void, yychar, yyline, yytext());}
+
 /* Operador Igual */
 ( "=" ) {return new Symbol(sym.Igual, yychar, yyline, yytext());}
 

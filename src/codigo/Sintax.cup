@@ -15,7 +15,8 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For,
+terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, Break,
+    Case, Const, Continue, Default, Return, Switch, Void,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,

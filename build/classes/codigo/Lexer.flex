@@ -5,6 +5,7 @@ import static codigo.Tokens.*;
 %type Tokens
 L=[a-zA-Z_]+
 D=[0-9]+
+H=[0-9a-fA-F]+
 espacio=[ ,\t,\r]+
 %{
     public String lexeme;
@@ -15,7 +16,7 @@ espacio=[ ,\t,\r]+
 {espacio} {/*Ignore*/}
 
 /* Comentarios */
-( "//"(.)* ) {/*Ignore*/}
+( "//"(.)* ) | ("/*"(.)*"*/") {/*Ignore*/}
 
 /* Salto de linea */
 ( "\n" ) {return Linea;}
@@ -43,6 +44,30 @@ espacio=[ ,\t,\r]+
 
 /* Palabra reservada For */
 ( for ) {lexeme=yytext(); return For;}
+
+/* Palabra reservada Break */
+( break ) {lexeme=yytext(); return Break;}
+
+/* Palabra reservada Case */
+( case ) {lexeme=yytext(); return Case;}
+
+/* Palabra reservada Const */
+( const ) {lexeme=yytext(); return Const;}
+
+/* Palabra reservada Continue */
+( continue ) {lexeme=yytext(); return Continue;}
+
+/* Palabra reservada Default */
+( default ) {lexeme=yytext(); return Default;}
+
+/* Palabra reservada Return */
+( return ) {lexeme=yytext(); return Return;}
+
+/* Palabra reservada Switch */
+( switch ) {lexeme=yytext(); return Switch;}
+
+/* Palabra reservada Void */
+( void ) {lexeme=yytext(); return Void;}
 
 /* Operador Igual */
 ( "=" ) {lexeme=yytext(); return Igual;}
@@ -105,7 +130,8 @@ espacio=[ ,\t,\r]+
 \".*\" | \'.\' {lexeme=yytext(); return Literal;}
 
 /* Numero */
-("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
+{D}+ | {D}+"."{D}* | "-"{D}+ | "-"{D}+"."{D}* | 0[xX]{H}+ | 0[xX]{H}+"."{H}*  {lexeme=yytext(); return Numero;}
+
 
 /* Error de analisis */
  . {return ERROR;}

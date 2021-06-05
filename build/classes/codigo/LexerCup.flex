@@ -9,6 +9,7 @@ import java_cup.runtime.Symbol;
 %char
 L=[a-zA-Z_]+
 D=[0-9]+
+H=[0-9a-fA-F]+
 espacio=[ ,\t,\r,\n]+
 %{
     private Symbol symbol(int type, Object value){
@@ -24,7 +25,7 @@ espacio=[ ,\t,\r,\n]+
 {espacio} {/*Ignore*/}
 
 /* Comentarios */
-( "//"(.)* ) {/*Ignore*/}
+( "//"(.)* ) | ("\/\*"(.)*"\*\/")  {/*Ignore*/}
 
 /* Comillas */
 ( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
@@ -49,6 +50,30 @@ espacio=[ ,\t,\r,\n]+
 
 /* Palabra reservada For */
 ( for ) {return new Symbol(sym.For, yychar, yyline, yytext());}
+
+/* Palabra reservada Break */
+( break ) {return new Symbol(sym.Break, yychar, yyline, yytext());}
+
+/* Palabra reservada Case */
+( case ) {return new Symbol(sym.Case, yychar, yyline, yytext());}
+
+/* Palabra reservada Const */
+( case ) {return new Symbol(sym.Const, yychar, yyline, yytext());}
+
+/* Palabra reservada Continue */
+( continue ) {return new Symbol(sym.Continue, yychar, yyline, yytext());}
+
+/* Palabra reservada Default */
+( default ) {return new Symbol(sym.Default, yychar, yyline, yytext());}
+
+/* Palabra reservada Return */
+( return ) {return new Symbol(sym.Return, yychar, yyline, yytext());}
+
+/* Palabra reservada Switch */
+( switch ) {return new Symbol(sym.Switch, yychar, yyline, yytext());}
+
+/* Palabra reservada Void */
+( void ) {return new Symbol(sym.Void, yychar, yyline, yytext());}
 
 /* Operador Igual */
 ( "=" ) {return new Symbol(sym.Igual, yychar, yyline, yytext());}
@@ -108,10 +133,10 @@ espacio=[ ,\t,\r,\n]+
 {L}({L}|{D})* {return new Symbol(sym.Identificador, yychar, yyline, yytext());}
 
 /* Literal */
-\".*\" | \'.\' {return new Symbol(sym.Literal, yychar, yyline, yytext());}
+"\"".*"\"" | "\'"."\'" {return new Symbol(sym.Literal, yychar, yyline, yytext());}
 
 /* Numero */
-("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+{D}+ | {D}+"."{D}* | "-"{D}+ | "-"{D}+"."{D}* | 0[xX]{H}+ | 0[xX]{H}+"."{H}* {return new Symbol(sym.Numero, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
