@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -20,13 +23,45 @@ import javax.swing.JFileChooser;
  * @author Kevin
  */
 public class Principal {
-    public static void main(String[] args) {
-        String ruta = "src/codigo/Lexer.flex";
-        generarLexer(ruta);
-        
+    public static void main(String[] args) throws Exception {
+        String ruta1 = "src/codigo/Lexer.flex";
+        String ruta2 = "src/codigo/LexerCup.flex";
+        String[] rutaS = {"-parser", "Sintax", "src/codigo/sintax.cup"};
+        generar(ruta1, ruta2, rutaS);
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
+        analizador(chooser);
+    }
+    
+    public static void generar(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception {
+        File archivo;
+        archivo = new File(ruta1);
+        JFlex.Main.generate(archivo);
+        archivo = new File(ruta2);
+        JFlex.Main.generate(archivo);
+        java_cup.Main.main(rutaS);
         
+        Path rutaSym = Paths.get("src/codigo/sym.java");
+        if (Files.exists(rutaSym)) {
+            Files.delete(rutaSym);
+        }
+        Files.move(
+                Paths.get("sym.java"),
+                Paths.get("src/codigo/sym.java")
+        );
+        Path rutaSin = Paths.get("src/codigo/Sintax.java");
+        if (Files.exists(rutaSin)) {
+            Files.delete(rutaSin);
+        }
+        Files.move(
+                Paths.get("Sintax.java"),
+                Paths.get("src/codigo/Sintax.java")
+        );
+        
+    }
+    
+    private static void analizador(JFileChooser chooser) throws Exception{
+       
         int cont = 1;
         
         try {
@@ -48,7 +83,12 @@ public class Principal {
                         cont++;
                         resultado += "Linea " + cont + "\n";
                         break;
-                    case Identificador: case Literal: case Reservadas: case Operador: case Delimitador:
+                    case Comillas: case T_dato: case Cadena: case If: case Else: case Do: case While:
+                    case For: case Igual: case Suma: case Resta: case Multiplicacion: case Division:
+                    case Op_logico: case Op_relacional: case Op_atribucion: case Op_incremento:
+                    case Op_booleano: case Parentesis_a: case Parentesis_c: case Llave_a: case Llave_c:
+                    case Corchete_a: case Corchete_c: case Main: case P_coma: case Identificador:
+                    case Literal: case Numero:
                         resultado += "  " + tokens + "\t" + lexer.lexeme + "\n";
                         break;
                     default:
@@ -63,8 +103,7 @@ public class Principal {
         }
     }
     
-    public static void generarLexer(String ruta) {
-        File archivo = new File(ruta);
-        JFlex.Main.generate(archivo);
-    }
+    //private static void parser(JFileChooser chooser) {
+    //    String ST = choos
+    //}
 }
